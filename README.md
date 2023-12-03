@@ -4,10 +4,10 @@ This is a collection of speech recordings and transcriptions from 70 Chinese Man
 
 ## Dataset Description
 
-- **Size**: 10 GB
+- **Size**: 
 - **Format**: WAV and TXT files
 - **Language**: Mandarin
-- **Source**: The speech recordings are collected by 2 members from StammerTalk. The transcriptions are done by AIShell.
+- **Source**: The speech recordings are collected by 2 members from StammerTalk [@ronggong](https://github.com/ronggong). The transcriptions are done by [AIShell](www.aishelltech.com).
 - **License**: CC BY NC 4.0
 
 ## Dataset Structure
@@ -27,3 +27,14 @@ The dataset can be downloaded from [this link]. The download is a ZIP file that 
 ## Dataset Citation
 
 If you use this dataset in your research or project, please cite it as follows:
+
+```
+@dataset{stamertalk_speech_70_2023,
+  title = {StammerTalk-speech-70 Dataset},
+  author = {StammerTalk, AImpower, AIShell, Northwestern polytechnical university, Wenet community},
+  year = {2023},
+  url = {^1^},
+  license = {CC BY NC 4.0}
+}
+
+```
