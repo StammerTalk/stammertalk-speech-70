@@ -24,6 +24,10 @@ The dataset is organized into folders by language. Each folder contains subfolde
 
 The dataset can be downloaded from [this link]. The download is a ZIP file that contains all the folders and files.
 
+## Description of annotation symbols
+
+Please check this [link](https://github.com/StammerTalk/stammertalk-speech-70/blob/main/annotation.md) for the description of annotation symbols, which include the stuttering event symbols, etc.
+
 ## Dataset Citation
 
 If you use this dataset in your research or project, please cite it as follows:
