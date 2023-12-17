@@ -3,12 +3,12 @@
 stage=0
 stop_stage=5
 
-. tools/parse_options.sh || exit 1;
+. src/tools/parse_options.sh || exit 1;
 
 # wenet git repo clone
 wenet=
 
-# this repo local dir, should contain ./asr and ./data
+# Entire repo local dir, which should contain ./asr/wenet-wenetspeech and ./data
 project_dir=
 
 # raw data dir
