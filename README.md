@@ -10,23 +10,20 @@ This is a collection of speech recordings and transcriptions from 70 Chinese Man
 - **Source**: The speech recordings are collected by 2 members from StammerTalk [@ronggong](https://github.com/ronggong). The transcriptions are done by [AIShell](www.aishelltech.com).
 - **License**: CC BY NC 4.0
 
-## Dataset Structure
-
-The dataset is organized into folders by language. Each folder contains subfolders for each source. Each subfolder contains WAV files and a metadata file. The metadata file has the following fields:
-
-- **filename**: The name of the WAV file
-- **duration**: The duration of the speech in seconds
-- **speaker**: The ID of the speaker
-- **gender**: The gender of the speaker (M/F)
-- **transcription**: The transcription of the speech.
-
-## Dataset Download
-
-The dataset can be downloaded from [this link]. The download is a ZIP file that contains all the folders and files.
-
 ## Description of annotation symbols
 
 Please check this [link](https://github.com/StammerTalk/stammertalk-speech-70/blob/main/annotation.md) for the description of annotation symbols, which include the stuttering event symbols, etc.
+
+## Data split
+
+For model building and evaluation, we provide the [train/dev/test split](https://github.com/StammerTalk/stammertalk-speech-70/blob/main/data/level_split.json) based on the stuttering severity level.
+
+## Baseline systems
+
+### ASR
+#### Wenetspeech model finetuning
+
+This system is based on [Wenet](https://github.com/wenet-e2e/wenet). We finetuned the Wenetspeech pretrained model with the train and dev splits. Please check [this](https://github.com/StammerTalk/stammertalk-speech-70/blob/main/asr/wenet-wenetspeech/README.md) for futher information on the scripts and results.
 
 ## Dataset Citation
 
