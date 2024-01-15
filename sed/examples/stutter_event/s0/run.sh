@@ -34,7 +34,7 @@ checkpoint=
 
 # use average_checkpoint will get better result
 average_checkpoint=false
-decode_checkpoint=$dir/29.pt
+decode_checkpoint=$dir/45.pt
 average_num=30
 
 . tools/parse_options.sh || exit 1;

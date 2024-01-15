@@ -11,7 +11,10 @@ wenet=
 # Entire repo local dir, which should contain ./asr/wenet-wenetspeech and ./data
 project_dir=
 
-# raw data dir
+# contain audio_deid_full.zip and annotation_deid_full.zip
+raw_data_dir=
+
+# utts data dir
 utts_data_dir=$project_dir/data
 
 cw_dir=$project_dir/asr/wenet-wenetspeech
@@ -24,7 +27,7 @@ model_dir=$cw_dir/models
 
 if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
     # prepare utterance data
-    python3 prepare_utts.py $utts_data_dir
+    python3 src/prepare_utts.py $raw_data_dir $utts_data_dir
 fi
 
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
@@ -34,14 +37,14 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     for split in train dev; do
         rm -r $data_dir/$split
         mkdir -p $data_dir/$split
-        ids=$(python3 get_ids.py $utts_data_dir/level_split.json $split)
+        ids=$(python3 src/get_ids.py $utts_data_dir/level_split.json $split)
         for i in ${ids}; do find $utts_data_dir/${i} -name '*.wav' -exec sh -c 'for f do echo "$(echo ${f%.*}) $(echo $f)"; done' sh {} + >> $data_dir/$split/wav.scp; done
         for i in ${ids}; do find $utts_data_dir/${i} -name '*.txt' -exec sh -c 'for f do echo "$(echo ${f%.*}) $(cat $f)"; done' sh {} + >> $data_dir/$split/text; done
     done
 
     rm -r $data_dir/test
     mkdir -p $data_dir/test
-    ids=$(python3 get_ids.py $utts_data_dir/level_split.json test)
+    ids=$(python3 src/get_ids.py $utts_data_dir/level_split.json test)
     # only take conversation_A*.wav and command*.wav as test sets
     for i in ${ids}; do find $utts_data_dir/${i} -name 'conversation_A*.wav' -exec sh -c 'for f do echo "$(echo ${f%.*}) $(echo $f)"; done' sh {} + >> $data_dir/test/wav.scp; done
     for i in ${ids}; do find $utts_data_dir/${i} -name 'command*.wav' -exec sh -c 'for f do echo "$(echo ${f%.*}) $(echo $f)"; done' sh {} + >> $data_dir/test/wav.scp; done
@@ -50,7 +53,7 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
 
     # remove punctuation from text since Wenet model doesn't produce them
     # filter long utterances
-    python3 clean_scp.py $data_dir $data_dir/filter.log
+    python3 src/clean_scp.py $data_dir $data_dir/filter.log
 fi
 
 if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
@@ -79,7 +82,7 @@ if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
     # test pretrained model
     cd $wenet/examples/wenetspeech_stutter/s0 && export exp_dir=exp/20220506_u2pp_conformer_exp && bash ./run.sh --stage 5 --stop_stage 5 --average_checkpoint false --dir $exp_dir --dict $exp_dir/units.txt --decode_checkpoint $exp_dir/final.pt --decode_modes "attention_rescoring"
     exp_dir=$wenet/examples/wenetspeech_stutter/s0/exp/20220506_u2pp_conformer_exp
-    cd $cw_dir/src; python3 stats.py $exp_dir/attention_rescoring $utts_data_dir/level_split.json $exp_dir/attention_rescoring/stats.txt
+    cd $cw_dir; python3 src/stats.py $exp_dir/attention_rescoring $utts_data_dir/level_split.json $exp_dir/attention_rescoring/stats.txt
 fi
 
 if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then
@@ -107,5 +110,5 @@ if [ ${stage} -le 5 ] && [ ${stop_stage} -ge 5 ]; then
     # test finetuned model
     cd $wenet/examples/wenetspeech_stutter/s0 && export exp_dir=exp/20220506_u2pp_conformer_exp_finetune && bash ./run.sh --stage 5 --stop_stage 5 --average_checkpoint false --dir $exp_dir --dict $exp_dir/units.txt --decode_checkpoint $exp_dir/4.pt --decode_modes "attention_rescoring"
     exp_dir=$wenet/examples/wenetspeech_stutter/s0/exp/20220506_u2pp_conformer_exp_finetune
-    cd $cw_dir/src; python3 stats.py $exp_dir/attention_rescoring $utts_data_dir/level_split.json $exp_dir/attention_rescoring/stats.txt
+    cd $cw_dir; python3 src/stats.py $exp_dir/attention_rescoring $utts_data_dir/level_split.json $exp_dir/attention_rescoring/stats.txt
 fi

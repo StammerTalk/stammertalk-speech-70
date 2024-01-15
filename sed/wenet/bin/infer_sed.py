@@ -109,7 +109,6 @@ def main():
         test_conf['mfcc_conf']['dither'] = 0.0
     test_conf['batch_conf']['batch_type'] = "static"
     test_conf['batch_conf']['batch_size'] = args.batch_size
-    threshold = 0.25
 
     test_dataset = Dataset(args.data_type,
                            args.test_data,
@@ -126,6 +125,8 @@ def main():
     device = torch.device('cuda' if use_cuda else 'cpu')
     model = model.to(device)
     model.eval()
+    threshold = torch.Tensor([[0.4, 0.35, 0.35, 0.35, 0.3]]).to(device)
+    print(f'threshold {threshold}')
 
     # TODO(Dinghao Zhou): Support RNN-T related decoding
     # TODO(Lv Xiang): Support k2 related decoding

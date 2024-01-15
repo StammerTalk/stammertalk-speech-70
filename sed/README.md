@@ -14,7 +14,7 @@ SED is a multi-label multi-class tagging problem. By giving a stuttering speech 
 
 We prepare the data by cutting long utterances into short snippets. The cut is done on the word time boundaries which have been identified by conducting forced alignment between the audios and the transcriptions.
 
-The dataset contains 44098 audio snippets, of which the average length is 3.98s.
+The dataset contains 41953 audio snippets, of which the average length is 4.19s.
 
 An annotation example:
 
@@ -44,8 +44,8 @@ F1:     19.27   17.06   16.47   40.37   25.16
 Confomer + sigmoid cross entropy loss  
 This is a model with 3 blocks Conformer encoder that is trained with sigmoid cross entropy loss. 
 ```
-        /p      /b      /r      /wr     /i
-Rec:    63.8    37.62   54.71   64.06   59.99
-Prec:   47.04   38.65   32.59   55.99   62.07
-F1:     54.15   38.13   40.85   59.75   61.01
+        /p      /b      /r      []     /i
+Rec:    65.67   33.6    53.22   59.88   67.26
+Prec:   63.71   25.86   52.36   57.95   69.58
+F1:     64.68   29.22   52.78   58.9    68.4
 ```

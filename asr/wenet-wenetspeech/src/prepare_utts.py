@@ -4,6 +4,7 @@ import zipfile
 import re
 import os
 import sys
+import shutil
 import soundfile as sf
 from pathlib import Path
 
@@ -14,6 +15,22 @@ angle = r"\<.+\>"
 blank = r"\s+"
 
 def clean_text(text):
+  # remove interjections
+  if '/i' in text:
+    start = 0
+    ps = []
+    while start < len(text):
+      position = text.find('/i', start)
+      if position == -1:
+        break
+      ps.append(position)
+      start = position + 1
+
+    for p in ps[::-1]:
+      while text[p].isascii():
+        p -= 1
+      text = text[:p] + text[p+1:]
+
   # clean stuttering annotations
   text = re.sub(stutter_pattern, '', text)
   text = re.sub(repeat, '', text)
@@ -74,19 +91,20 @@ def process_utt(data_dir, audio_unzip_dir, cleaned_dir, subdir, audio_file):
           j += 1
 
 if __name__ == '__main__':
-  data_dir = sys.argv[1]
+  data_dir, utts_data_dir = sys.argv[1:]
 
   data_dir = Path(data_dir)
+  utts_data_dir = Path(utts_data_dir)
 
   annotation = data_dir / 'annotation_deid_full.zip'
   audio = data_dir / 'audio_deid_full.zip'
 
   # annotation unzip
-  destination_dir = data_dir / 'annotation_unzip'
+  destination_dir = utts_data_dir / 'annotation_unzip'
   destination_dir.mkdir(exist_ok=True)
   # stuttering annotation cleaned
-  cleaned_dir = data_dir / 'annotation_cleaned'
-  audio_unzip_dir = data_dir / 'audio_unzip'
+  cleaned_dir = utts_data_dir / 'annotation_cleaned'
+  audio_unzip_dir = utts_data_dir / 'audio_unzip'
   audio_unzip_dir.mkdir(exist_ok=True)
 
   with zipfile.ZipFile(annotation, 'r') as zip_ref:
@@ -116,4 +134,8 @@ if __name__ == '__main__':
     for audio_file in audio_files:
       if audio_file.endswith('.wav'):
         subdir = os.path.basename(audio_rootdir)
-        process_utt(data_dir, audio_unzip_dir, cleaned_dir, subdir, audio_file)
+        process_utt(utts_data_dir, audio_unzip_dir, cleaned_dir, subdir, audio_file)
+
+  shutil.rmtree(destination_dir)
+  shutil.rmtree(audio_unzip_dir)
+  shutil.rmtree(cleaned_dir)
