@@ -10,24 +10,24 @@ Pretrained model evaluation results: `stats_pretrained.txt`
 ```
 Level     |Category
 ----------|------------
-mild      |all         :	WER=11.45% N= 73745 C= 67300 D=1669 S=4776 I=1999
-moderate  |all         :	WER=15.75% N= 28525 C= 25294 D= 851 S=2380 I=1263
-severe    |all         :	WER=32.90% N=  9595 C=  8166 D= 442 S= 987 I=1728
-all       |conversation:	WER=11.80% N= 71892 C= 66419 D=2683 S=2790 I=3007
-all       |command     :	WER=19.05% N= 39973 C= 34341 D= 279 S=5353 I=1983
-all       |all         :	WER=14.39% N=111865 C=100760 D=2962 S=8143 I=4990
+mild      |all         :	WER=11.41% N= 64095 C= 58821 D= 982 S=4292 I=2042
+moderate  |all         :	WER=17.81% N= 22143 C= 19251 D= 509 S=2383 I=1051
+severe    |all         :	WER=33.21% N=  9204 C=  7988 D= 274 S= 942 I=1841
+all       |conversation:	WER=11.82% N= 60099 C= 56098 D=1540 S=2461 I=3105
+all       |command     :	WER=20.40% N= 35343 C= 29962 D= 225 S=5156 I=1829
+all       |all         :	WER=15.00% N= 95442 C= 86060 D=1765 S=7617 I=4934
 ```
 
 Finetuned model evaluation results: `stats_finetuned.txt`
 ```
 Level     |Category
 ----------|------------
-mild      |all         :	WER= 7.74% N= 73745 C= 69313 D=1149 S=3283 I=1278
-moderate  |all         :	WER=10.02% N= 28525 C= 26319 D= 659 S=1547 I= 653
-severe    |all         :	WER=18.42% N=  9595 C=  8450 D= 458 S= 687 I= 622
-all       |conversation:	WER= 8.54% N= 71892 C= 67763 D=1724 S=2405 I=2008
-all       |command     :	WER=10.50% N= 39973 C= 36319 D= 542 S=3112 I= 545
-all       |all         :	WER= 9.24% N=111865 C=104082 D=2266 S=5517 I=2553
+mild      |all         :	WER= 8.00% N= 64095 C= 60136 D=1117 S=2842 I=1169
+moderate  |all         :	WER=12.48% N= 22143 C= 19902 D= 647 S=1594 I= 523
+severe    |all         :	WER=17.29% N=  9204 C=  8084 D= 492 S= 628 I= 471
+all       |conversation:	WER= 9.16% N= 60099 C= 56332 D=1741 S=2026 I=1741
+all       |command     :	WER=11.25% N= 35343 C= 31790 D= 515 S=3038 I= 422
+all       |all         :	WER= 9.94% N= 95442 C= 88122 D=2256 S=5064 I=2163
 ```
 
-On all levels and categories, the finetuning achieved 35.86% WERR.
+On all levels and categories, the finetuning achieved 35.73% WERR.
