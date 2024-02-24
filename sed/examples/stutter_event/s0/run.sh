@@ -25,7 +25,7 @@ dict=data/dict/lang_char.txt
 
 train_set=train
 dev_set=dev
-test_sets=test
+test_sets="test/mild/A test/mild/P test/moderate/A test/moderate/P test/severe/A test/severe/P"
 
 train_config=conf/train_conformer.yaml
 cmvn=true
@@ -34,7 +34,7 @@ checkpoint=
 
 # use average_checkpoint will get better result
 average_checkpoint=false
-decode_checkpoint=$dir/45.pt
+decode_checkpoint=$dir/42.pt
 average_num=30
 
 . tools/parse_options.sh || exit 1;
@@ -53,10 +53,20 @@ fi
 if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
   # Prepare wenet required data
   echo "Prepare data, prepare required format"
-  for x in $train_set $dev_set ${test_sets}; do
+  for x in $train_set $dev_set; do
     tools/make_shard_list.py --num_utts_per_shard $num_utts_per_shard \
       --num_threads 32 --segments data/$x/segments \
       data/$x/wav.scp data/$x/text $(realpath data/$x/shards) data/$x/data.list
+  done
+
+  for level in mild moderate severe; do
+    # A: conversation, P: commands
+    for category in A P; do
+      tools/make_shard_list.py --num_utts_per_shard $num_utts_per_shard \
+        --num_threads 32 --segments data/test/$level/${category}/segments \
+        data/test/$level/wav.scp data/test/$level/${category}/text \
+        $(realpath data/test/$level/${category}/shards) data/test/$level/${category}/data.list
+    done
   done
 fi
 

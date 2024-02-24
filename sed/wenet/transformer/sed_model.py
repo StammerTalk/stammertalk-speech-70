@@ -62,11 +62,10 @@ class SEDModel(torch.nn.Module):
                                          text.shape, text_lengths.shape)
         # 1. Encoder
         encoder_out, encoder_mask = self.encoder(speech, speech_lengths)
-        encoder_out_lens = encoder_mask.squeeze(1).sum(1)
-
+        encoder_mask = encoder_mask.squeeze(1).unsqueeze(-1)
+        encoder_out = encoder_out * encoder_mask
         encoder_out = encoder_out.mean(dim=1)
         encoder_out = self.linear(encoder_out)
-
         loss = self.loss_fn(encoder_out, text)
 
         return {"loss": loss}
@@ -78,8 +77,10 @@ class SEDModel(torch.nn.Module):
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         # Let's assume B = batch_size
         encoder_out, encoder_mask = self.encoder(speech, speech_lengths)
+        encoder_mask = encoder_mask.squeeze(1).unsqueeze(-1)
+        encoder_out = encoder_out * encoder_mask
         encoder_out = encoder_out.mean(dim=1)
-        return encoder_out, encoder_mask
+        return encoder_out
 
     def decode(
         self,
@@ -102,7 +103,7 @@ class SEDModel(torch.nn.Module):
         Returns: 
         """
         assert speech.shape[0] == speech_lengths.shape[0]
-        encoder_out, encoder_mask = self._forward_encoder(
+        encoder_out = self._forward_encoder(
             speech, speech_lengths)
         encoder_out = self.linear(encoder_out)
         results = torch.sigmoid(encoder_out)

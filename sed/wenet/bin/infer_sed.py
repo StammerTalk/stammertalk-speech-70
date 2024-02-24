@@ -68,8 +68,8 @@ def calc_hit_hyp_ref(results, target):
     return hit, hyp, ref
 
 def calc_rec_prec_f1(hit, hyp, ref):
-    def to_string(t):
-        return '\t'.join([str(round(r * 100, 2)) for r in t.tolist()])
+    def to_string(t, do_round=True):
+        return '\t'.join([str(round(r * 100, 2)) if do_round else str(r) for r in t.tolist()])
     rec = hit / ref
     prec = hit / hyp
     f1 = 2 * rec * prec / (rec + prec)
@@ -77,6 +77,9 @@ def calc_rec_prec_f1(hit, hyp, ref):
     print('Rec:\t'+to_string(rec))
     print('Prec:\t'+to_string(prec))
     print('F1:\t'+to_string(f1))
+    print('hit:\t'+to_string(hit, False))
+    print('hyp:\t'+to_string(hyp, False))
+    print('ref:\t'+to_string(ref, False))
 
 def main():
     args = get_args()
@@ -125,7 +128,7 @@ def main():
     device = torch.device('cuda' if use_cuda else 'cpu')
     model = model.to(device)
     model.eval()
-    threshold = torch.Tensor([[0.4, 0.35, 0.35, 0.35, 0.3]]).to(device)
+    threshold = torch.Tensor([[0.42, 0.35, 0.37, 0.37, 0.4]]).to(device)
     print(f'threshold {threshold}')
 
     # TODO(Dinghao Zhou): Support RNN-T related decoding

@@ -1,13 +1,14 @@
-import sys, os
-import json
-
-split_file, split = sys.argv[1:]
+split_file, split, level = sys.argv[1:]
 
 with open(os.path.join(split_file)) as f:
     splits = json.load(f)
 
 ids = []
-for level in splits:
+if level == 'all':
+    for level in splits:
+        for id_ in splits[level][split]:
+            ids.append(id_)
+else:
     for id_ in splits[level][split]:
         ids.append(id_)
 

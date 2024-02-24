@@ -42,10 +42,5 @@ F1:     19.27   17.06   16.47   40.37   25.16
 ```
 
 Confomer + sigmoid cross entropy loss  
-This is a model with 3 blocks Conformer encoder that is trained with sigmoid cross entropy loss. 
-```
-        /p      /b      /r      []     /i
-Rec:    65.67   33.6    53.22   59.88   67.26
-Prec:   63.71   25.86   52.36   57.95   69.58
-F1:     64.68   29.22   52.78   58.9    68.4
-```
+This is a model with 3 blocks Conformer encoder that is trained with sigmoid cross entropy loss.
+Results please check the overleaf paper.
