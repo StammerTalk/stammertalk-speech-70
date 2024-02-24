@@ -123,4 +123,5 @@ if [ ${stage} -le 5 ] && [ ${stop_stage} -ge 5 ]; then
       --result_dir $test_dir \
       --batch_size 128
   done
+  python local/mk_stat.py $dir "${test_sets}"
 fi
