@@ -18,7 +18,7 @@ num_nodes=1
 num_utts_per_shard=500
 
 # data folder should contain ./ref/{0001..0070}.csv and ./wav/{0001..0070}/meeting_01.wav
-data_source=/fs/data/users/rong_gong/is2024/data
+data_source=
 
 nj=16
 dict=data/dict/lang_char.txt

@@ -1,5 +1,7 @@
 # Stuttering event detection (SED)
 
+This code has addtional components for [Wenet](https://github.com/wenet-e2e/wenet) (git commit: 188e5e9c2c3250f4ed44af4a09d2a8866e4a0ab6). Please check `examples` and `wenet` folders.
+
 SED is a multi-label multi-class tagging problem. By giving a stuttering speech audio snippet, the system aims to tag five stuttering events:
 
 ```

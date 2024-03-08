@@ -1,6 +1,8 @@
 # Wenet Wenetspeech finetuning
 
-We finetuned the Wenetspeech pretrained model with the train and dev splits, and evaluate on the test split.
+This code is based on [Wenet](https://github.com/wenet-e2e/wenet) (git commit: 188e5e9c2c3250f4ed44af4a09d2a8866e4a0ab6). Please check `run.sh`.
+
+We finetuned the Conformer Wenetspeech pretrained model with the train and dev splits, and evaluate on the test split.
 
 Please refer to `run.sh` for data preprocessing, finetuning and evaluation. The finetuning config is located in `models/train.yaml`.
 
