@@ -1,8 +1,8 @@
-accum_grad: 16
+accum_grad: 8
 cmvn_file: exp/20220506_u2pp_conformer_exp/global_cmvn
 dataset_conf:
   batch_conf:
-    batch_size: 48
+    batch_size: 96
     batch_type: dynamic
     max_frames_in_batch: 24000
   fbank_conf:
@@ -64,7 +64,7 @@ grad_clip: 5
 input_dim: 80
 is_json_cmvn: true
 log_interval: 500
-max_epoch: 5
+max_epoch: 400
 model_conf:
   ctc_weight: 0.3
   length_normalized_loss: false
@@ -72,11 +72,11 @@ model_conf:
   reverse_weight: 0.3
 optim: adam
 optim_conf:
-  lr: 1.0e-05
+  lr: 2.5e-05
 output_dim: 5538
 scheduler: NoamHoldAnnealing
 scheduler_conf:
-  hold_steps: 25000
-  max_steps: null
-  min_lr: 1.0e-05
-  warmup_steps: 1
+  hold_steps: 250
+  max_steps: 100000
+  min_lr: 2.5e-06
+  warmup_steps: 40

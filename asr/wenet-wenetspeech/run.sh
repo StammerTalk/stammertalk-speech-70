@@ -108,7 +108,7 @@ fi
 
 if [ ${stage} -le 5 ] && [ ${stop_stage} -ge 5 ]; then
     # test finetuned model
-    cd $wenet/examples/wenetspeech_stutter/s0 && export exp_dir=exp/20220506_u2pp_conformer_exp_finetune && bash ./run.sh --stage 5 --stop_stage 5 --average_checkpoint false --dir $exp_dir --dict $exp_dir/units.txt --decode_checkpoint $exp_dir/4.pt --decode_modes "attention_rescoring"
+    cd $wenet/examples/wenetspeech_stutter/s0 && export exp_dir=exp/20220506_u2pp_conformer_exp_finetune && bash ./run.sh --stage 5 --stop_stage 5 --average_checkpoint true --dir $exp_dir --dict $exp_dir/units.txt --decode_checkpoint $exp_dir/200.pt --decode_modes "attention_rescoring"
     exp_dir=$wenet/examples/wenetspeech_stutter/s0/exp/20220506_u2pp_conformer_exp_finetune
     cd $cw_dir; python3 src/stats.py $exp_dir/attention_rescoring $utts_data_dir/level_split.json $exp_dir/attention_rescoring/stats.txt
 fi

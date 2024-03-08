@@ -22,12 +22,12 @@ Finetuned model evaluation results: `stats_finetuned.txt`
 ```
 Level     |Category
 ----------|------------
-mild      |all         :	WER= 8.00% N= 64095 C= 60136 D=1117 S=2842 I=1169
-moderate  |all         :	WER=12.48% N= 22143 C= 19902 D= 647 S=1594 I= 523
-severe    |all         :	WER=17.29% N=  9204 C=  8084 D= 492 S= 628 I= 471
-all       |conversation:	WER= 9.16% N= 60099 C= 56332 D=1741 S=2026 I=1741
-all       |command     :	WER=11.25% N= 35343 C= 31790 D= 515 S=3038 I= 422
-all       |all         :	WER= 9.94% N= 95442 C= 88122 D=2256 S=5064 I=2163
+mild      |all         :    WER= 5.20% N= 64095 C= 61875 D= 876 S=1344 I=1115
+moderate  |all         :    WER= 8.00% N= 22143 C= 20903 D= 459 S= 781 I= 532
+severe    |all         :    WER= 9.25% N=  9204 C=  8623 D= 302 S= 279 I= 270
+all       |conversation:    WER= 7.96% N= 60099 C= 57051 D=1331 S=1717 I=1736
+all       |command     :    WER= 3.32% N= 35343 C= 34350 D= 306 S= 687 I= 181
+all       |all         :    WER= 6.24% N= 95442 C= 91401 D=1637 S=2404 I=1917
 ```
 
 On all levels and categories, the finetuning achieved 35.73% WERR.
