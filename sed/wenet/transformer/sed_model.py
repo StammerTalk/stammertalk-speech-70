@@ -61,9 +61,13 @@ class SEDModel(torch.nn.Module):
                 text_lengths.shape[0]), (speech.shape, speech_lengths.shape,
                                          text.shape, text_lengths.shape)
         # 1. Encoder
-        encoder_out, encoder_mask = self.encoder(speech, speech_lengths)
-        encoder_mask = encoder_mask.squeeze(1).unsqueeze(-1)
-        encoder_out = encoder_out * encoder_mask
+        encoder_output = self.encoder(speech, speech_lengths)
+        if len(encoder_output) == 2:
+            encoder_out, encoder_mask = encoder_output
+            encoder_mask = encoder_mask.squeeze(1).unsqueeze(-1)
+            encoder_out = encoder_out * encoder_mask
+        else:
+            encoder_out, _, _ = encoder_output
         encoder_out = encoder_out.mean(dim=1)
         encoder_out = self.linear(encoder_out)
         loss = self.loss_fn(encoder_out, text)
@@ -76,9 +80,13 @@ class SEDModel(torch.nn.Module):
         speech_lengths: torch.Tensor,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         # Let's assume B = batch_size
-        encoder_out, encoder_mask = self.encoder(speech, speech_lengths)
-        encoder_mask = encoder_mask.squeeze(1).unsqueeze(-1)
-        encoder_out = encoder_out * encoder_mask
+        encoder_output = self.encoder(speech, speech_lengths)
+        if len(encoder_output) == 2:
+            encoder_out, encoder_mask = encoder_output
+            encoder_mask = encoder_mask.squeeze(1).unsqueeze(-1)
+            encoder_out = encoder_out * encoder_mask
+        else:
+            encoder_out, _, _ = encoder_output
         encoder_out = encoder_out.mean(dim=1)
         return encoder_out
 
