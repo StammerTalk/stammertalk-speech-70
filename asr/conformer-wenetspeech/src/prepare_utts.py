@@ -14,9 +14,9 @@ bracket = r"[\[\]]"
 angle = r"\<.+\>"
 blank = r"\s+"
 
-def clean_text(text):
+def clean_text(text, semantic=True):
   # remove interjections
-  if '/i' in text:
+  if semantic and '/i' in text:
     start = 0
     ps = []
     while start < len(text):
@@ -32,8 +32,9 @@ def clean_text(text):
       text = text[:p] + text[p+1:]
 
   # clean stuttering annotations
+  if semantic:
+    text = re.sub(repeat, '', text)
   text = re.sub(stutter_pattern, '', text)
-  text = re.sub(repeat, '', text)
   text = re.sub(bracket, '', text)
   text = re.sub(angle, '', text)
   text = re.sub(blank, ' ', text) # replace multiple blank
@@ -91,10 +92,16 @@ def process_utt(data_dir, audio_unzip_dir, cleaned_dir, subdir, audio_file):
           j += 1
 
 if __name__ == '__main__':
-  data_dir, utts_data_dir = sys.argv[1:]
+  import argparse
+  parser = argparse.ArgumentParser()
+  parser.add_argument('data_dir', type=Path, help='path to the data directory')
+  parser.add_argument('utts_data_dir', type=Path, help='path to the utts data directory')
+  parser.add_argument('--verbatim', action='store_true', help='whether to use verbatim annotations')
+  args = parser.parse_args()
 
-  data_dir = Path(data_dir)
-  utts_data_dir = Path(utts_data_dir)
+  data_dir = args.data_dir
+  utts_data_dir = args.utts_data_dir
+  semantic = not args.verbatim
 
   annotation = data_dir / 'annotation_deid_full.zip'
   audio = data_dir / 'audio_deid_full.zip'
@@ -127,7 +134,7 @@ if __name__ == '__main__':
             if not l: continue
             start, end, *text = l.split()
             text = ' '.join(text)
-            fo.write(f'{start}\t{end}\t{clean_text(text)}\n')
+            fo.write(f'{start}\t{end}\t{clean_text(text, semantic)}\n')
 
   # loop audio path and save wav and text
   for audio_rootdir, _, audio_files in os.walk(audio_unzip_dir):

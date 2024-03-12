@@ -17,7 +17,7 @@ raw_data_dir=
 # utts data dir
 utts_data_dir=$project_dir/data
 
-cw_dir=$project_dir/asr/wenet-wenetspeech
+cw_dir=$project_dir/asr/conformer-wenetspeech
 data_dir=$cw_dir/data
 model_dir=$cw_dir/models
 
