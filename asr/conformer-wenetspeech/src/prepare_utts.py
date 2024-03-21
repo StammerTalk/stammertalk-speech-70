@@ -3,7 +3,6 @@
 import zipfile
 import re
 import os
-import sys
 import shutil
 import soundfile as sf
 from pathlib import Path
@@ -108,11 +107,11 @@ if __name__ == '__main__':
 
   # annotation unzip
   destination_dir = utts_data_dir / 'annotation_unzip'
-  destination_dir.mkdir(exist_ok=True)
+  destination_dir.mkdir(exist_ok=True, parents=True)
   # stuttering annotation cleaned
   cleaned_dir = utts_data_dir / 'annotation_cleaned'
   audio_unzip_dir = utts_data_dir / 'audio_unzip'
-  audio_unzip_dir.mkdir(exist_ok=True)
+  audio_unzip_dir.mkdir(exist_ok=True, parents=True)
 
   with zipfile.ZipFile(annotation, 'r') as zip_ref:
       zip_ref.extractall(destination_dir)

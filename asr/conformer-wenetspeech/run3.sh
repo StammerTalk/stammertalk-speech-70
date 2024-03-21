@@ -8,24 +8,24 @@ stop_stage=5
 . src/tools/parse_options.sh || exit 1;
 
 # wenet git repo clone
-wenet=
+wenet=/fs/scratch/users/rong_gong/2021/wenet
 
 # Entire repo local dir, which should contain ./asr/wenet-wenetspeech and ./data
-project_dir=
+project_dir=/fs/scratch/users/rong_gong/2023/dax/is2023
 
 # contain audio_deid_full.zip and annotation_deid_full.zip
-raw_data_dir=
+raw_data_dir=/fs/data/users/rong_gong/is2024
 
 # utts data dir
-utts_data_dir=$project_dir/data
+utts_data_dir=$project_dir/data_verbatim
 
 # train/dev/test
-par=level_split2.json
+par=$project_dir/data/level_split2.json
 
-exp=wenetspeech_stutter2
+exp=wenetspeech_stutter_verbatim
 
 cw_dir=$project_dir/asr/conformer-wenetspeech
-data_dir=$cw_dir/data2
+data_dir=$cw_dir/data_verbatim
 model_dir=$cw_dir/models
 
 # download wenetspeech pretrained checkpoint model from
@@ -34,7 +34,7 @@ model_dir=$cw_dir/models
 
 if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
     # prepare utterance data
-    python3 src/prepare_utts.py $raw_data_dir $utts_data_dir
+    python3 src/prepare_utts.py $raw_data_dir $utts_data_dir --verbatim
 fi
 
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
@@ -44,14 +44,14 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     for split in train dev; do
         rm -r $data_dir/$split
         mkdir -p $data_dir/$split
-        ids=$(python3 src/get_ids.py $utts_data_dir/$par $split)
+        ids=$(python3 src/get_ids.py $par $split)
         for i in ${ids}; do find $utts_data_dir/${i} -name '*.wav' -exec sh -c 'for f do echo "$(echo ${f%.*}) $(echo $f)"; done' sh {} + >> $data_dir/$split/wav.scp; done
         for i in ${ids}; do find $utts_data_dir/${i} -name '*.txt' -exec sh -c 'for f do echo "$(echo ${f%.*}) $(cat $f)"; done' sh {} + >> $data_dir/$split/text; done
     done
 
     rm -r $data_dir/test
     mkdir -p $data_dir/test
-    ids=$(python3 src/get_ids.py $utts_data_dir/$par test)
+    ids=$(python3 src/get_ids.py $par test)
     # only take conversation_A*.wav and command*.wav as test sets
     for i in ${ids}; do find $utts_data_dir/${i} -name 'conversation_A*.wav' -exec sh -c 'for f do echo "$(echo ${f%.*}) $(echo $f)"; done' sh {} + >> $data_dir/test/wav.scp; done
     for i in ${ids}; do find $utts_data_dir/${i} -name 'command*.wav' -exec sh -c 'for f do echo "$(echo ${f%.*}) $(echo $f)"; done' sh {} + >> $data_dir/test/wav.scp; done
@@ -89,7 +89,7 @@ if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
     # test pretrained model
     cd $wenet/examples/$exp/s0 && export exp_dir=exp/20220506_u2pp_conformer_exp && bash ./run.sh --stage 5 --stop_stage 5 --average_checkpoint false --dir $exp_dir --dict $exp_dir/units.txt --decode_checkpoint $exp_dir/final.pt --decode_modes "attention_rescoring"
     exp_dir=$wenet/examples/$exp/s0/exp/20220506_u2pp_conformer_exp
-    cd $cw_dir && python3 src/stats.py $exp_dir/attention_rescoring $utts_data_dir/$par $exp_dir/attention_rescoring/stats.txt
+    cd $cw_dir && python3 src/stats.py $exp_dir/attention_rescoring $par $exp_dir/attention_rescoring/stats.txt
 fi
 
 if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then
@@ -117,5 +117,5 @@ if [ ${stage} -le 5 ] && [ ${stop_stage} -ge 5 ]; then
     # test finetuned model
     cd $wenet/examples/$exp/s0 && export exp_dir=exp/20220506_u2pp_conformer_exp_finetune && bash ./run.sh --stage 5 --stop_stage 5 --average_checkpoint true --dir $exp_dir --dict $exp_dir/units.txt --decode_checkpoint $exp_dir/200.pt --decode_modes "attention_rescoring"
     exp_dir=$wenet/examples/$exp/s0/exp/20220506_u2pp_conformer_exp_finetune
-    cd $cw_dir && python3 src/stats.py $exp_dir/attention_rescoring $utts_data_dir/$par $exp_dir/attention_rescoring/stats.txt
+    cd $cw_dir && python3 src/stats.py $exp_dir/attention_rescoring $par $exp_dir/attention_rescoring/stats.txt
 fi
